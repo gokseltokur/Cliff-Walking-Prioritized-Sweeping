@@ -77,7 +77,7 @@ class Board:
             return -1
         if self.board[pos] == 0:
             return -1
-        if self.board[pos] == 'E':
+        if self.x == ENDX and self.y == ENDY:
             return +100
         return -100
 

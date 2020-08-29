@@ -6,7 +6,7 @@ q = queue.Queue(maxsize=20)
 from queue import PriorityQueue
 
 class Agent:
-    def __init__(self, exploration_rate, learning_rate, theta=0):
+    def __init__(self, exploration_rate, learning_rate, n_steps=5, theta=0):
         self.board = Board()
         self.exploration_rate = exploration_rate
         self.learning_rate = learning_rate
@@ -18,7 +18,8 @@ class Agent:
         # Dictionary
         self.state_actions = {}
 
-
+        self.n_steps = n_steps
+        
         self.model = {}
         
         for i in range(len(self.board.board)):
@@ -75,14 +76,17 @@ class Agent:
                 self.states.append((current_state, action))
 
                 nxtState = self.board.move(action)
-
+                if self.board.is_agent_die:
+                    break
                 self.board.x = nxtState[0]
                 self.board.y = nxtState[1]
                 self.x = self.board.x
                 self.y = self.board.y
+                
+                reward = self.board.reward()    
 
-                reward = self.board.reward()                
-
+                #print( self.state_actions )
+                #print( np.max(list(self.state_actions[nxtState].values())) )
                 tmp_diff = reward + np.max(list(self.state_actions[nxtState].values())) - self.state_actions[current_state][action]
                 if tmp_diff > self.theta:
                     self.queue.put((-tmp_diff, (current_state, action)))
@@ -96,17 +100,16 @@ class Agent:
                 else:
                     self.predecessors[nxtState].append((current_state, action))
                 current_state = nxtState
+                
 
-                if self.board.is_agent_die:
-                    break
+                
 
-                #for _ in range(self) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                while 1:
+                for _ in range(self.n_steps):
                     if self.queue.empty():
                         break
                     _state, _action = self.queue.get()[1]
                     _reward, _nxtState = self.model[_state][_action]
-                    self.state_actions[_state][_action] += self.lr * (_reward + np.max(list(self.state_actions[_nxtState].values())) - self.state_actions[_state][_action])
+                    self.state_actions[_state][_action] += self.learning_rate * (_reward + np.max(list(self.state_actions[_nxtState].values())) - self.state_actions[_state][_action])
 
                     # Loop in all states, action predicted lead to _state
                     if _state not in self.predecessors.keys():
@@ -119,7 +122,6 @@ class Agent:
 
                         if pre_tmp_diff > self.theta:
                             self.queue.put((-pre_tmp_diff, (pre_state, pre_action)))
-                
             print("#####", int(i))
             self.steps_per_episode.append(len(self.states))
             self.reset()
