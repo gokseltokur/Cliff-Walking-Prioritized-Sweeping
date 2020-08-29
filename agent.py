@@ -88,7 +88,7 @@ class Agent:
                 #print( self.state_actions )
                 #print( np.max(list(self.state_actions[nxtState].values())) )
                 tmp_diff = reward + np.max(list(self.state_actions[nxtState].values())) - self.state_actions[current_state][action]
-                if tmp_diff > self.theta:
+                if tmp_diff < self.theta:
                     self.queue.put((-tmp_diff, (current_state, action)))
 
                 # Update model and predecessors ????????????????
@@ -120,7 +120,7 @@ class Agent:
                         pre_reward, _ = self.model[pre_state][pre_action]
                         pre_tmp_diff = pre_reward + np.max(list(self.state_actions[_state].values())) - self.state_actions[pre_state][pre_action]
 
-                        if pre_tmp_diff > self.theta:
+                        if pre_tmp_diff < self.theta:
                             self.queue.put((-pre_tmp_diff, (pre_state, pre_action)))
             print("#####", int(i))
             self.steps_per_episode.append(len(self.states))
