@@ -74,12 +74,12 @@ class Board:
         #print(self.x, self.y)
         #print('@' + str(pos))
         if self.x == STARTX and self.y == STARTY :
-            return -1
+            return 0
         if self.x == ENDX and self.y == ENDY:
-            return +100
+            return 1
         if self.board[pos] == 0:
-            return -1
-        return -100
+            return 0
+        return -10
 
 
 

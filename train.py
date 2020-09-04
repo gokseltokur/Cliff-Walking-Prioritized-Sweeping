@@ -2,9 +2,9 @@ from board import *
 from agent import *
 import numpy as np
 
-EXPLORATION_RATE = 0.3
+EXPLORATION_RATE = 0.2
 LEARNING_RATE = 0.1
-NUMBER_OF_ROUNDS = 1000
+NUMBER_OF_ROUNDS = 400
 
 
 def main():

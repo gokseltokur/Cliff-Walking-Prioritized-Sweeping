@@ -6,7 +6,7 @@ q = queue.Queue(maxsize=20)
 from queue import PriorityQueue
 
 class Agent:
-    def __init__(self, exploration_rate, learning_rate, n_steps=5, theta=0):
+    def __init__(self, exploration_rate, learning_rate, n_steps=4, theta=0):
         self.board = Board()
         self.exploration_rate = exploration_rate
         self.learning_rate = learning_rate
@@ -76,8 +76,7 @@ class Agent:
                 self.states.append((current_state, action))
 
                 nxtState = self.board.move(action)
-                if self.board.is_agent_die:
-                    break
+                
                 self.board.x = nxtState[0]
                 self.board.y = nxtState[1]
                 self.x = self.board.x
@@ -87,9 +86,9 @@ class Agent:
 
                 #print( self.state_actions )
                 #print( np.max(list(self.state_actions[nxtState].values())) )
-                tmp_diff = reward + np.max(list(self.state_actions[nxtState].values())) - self.state_actions[current_state][action]
-                if tmp_diff < self.theta:
-                    self.queue.put((-tmp_diff, (current_state, action)))
+                tmp_diff = abs(reward + np.max(list(self.state_actions[nxtState].values())) - self.state_actions[current_state][action])
+                if tmp_diff > self.theta:
+                    self.queue.put((tmp_diff, (current_state, action)))
 
                 # Update model and predecessors ????????????????
                 if current_state not in self.model.keys():
@@ -118,10 +117,13 @@ class Agent:
 
                     for (pre_state, pre_action) in pre_state_action_list:
                         pre_reward, _ = self.model[pre_state][pre_action]
-                        pre_tmp_diff = pre_reward + np.max(list(self.state_actions[_state].values())) - self.state_actions[pre_state][pre_action]
+                        pre_tmp_diff = abs(pre_reward + np.max(list(self.state_actions[_state].values())) - self.state_actions[pre_state][pre_action])
 
-                        if pre_tmp_diff < self.theta:
-                            self.queue.put((-pre_tmp_diff, (pre_state, pre_action)))
+                        if pre_tmp_diff > self.theta:
+                            self.queue.put((pre_tmp_diff, (pre_state, pre_action)))
+
+                if self.board.is_agent_die:
+                    break
             print("#####", int(i))
             self.steps_per_episode.append(len(self.states))
             self.reset()
