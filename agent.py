@@ -16,6 +16,7 @@ class Agent:
         self.y = self.board.y
         self.actions = ["n", "s", "w", "e"]
         self.heat_map_number_of_pass = np.zeros([self.board.rows,self.board.columns])
+        self.heat_map_q_values = np.zeros([self.board.rows, self.board.columns])
 
         self.states = []
         # Dictionary
