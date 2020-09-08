@@ -21,6 +21,8 @@ class Board:
         self.endy = ENDY
         self.is_agent_reach = False
         self.is_agent_die = False
+        self.rows = ROWS
+        self.columns = COLUMNS
 
         self.board[1][1] = -1
         self.board[1][2] = -1

@@ -15,6 +15,7 @@ class Agent:
         self.x = self.board.x
         self.y = self.board.y
         self.actions = ["n", "s", "w", "e"]
+        self.heat_map_number_of_pass = np.zeros([self.board.rows,self.board.columns])
 
         self.states = []
         # Dictionary
@@ -79,6 +80,8 @@ class Agent:
                 self.states.append((current_state, action))
 
                 nxtState = self.board.move(action)
+
+                self.heat_map_number_of_pass[nxtState] += 1
                 
                 self.board.x = nxtState[0]
                 self.board.y = nxtState[1]
@@ -158,17 +161,22 @@ class Agent:
                     print("VARIANCE == 0")
                     break
                 
-
+                
 
             self.reset()
-        # sns.set()
+
+
+        
+        # print (self.state_actions)
+
+        sns.set()
         # nparray = np.array(self.steps_per_episode)
-        # print(nparray)
+        # # print(nparray)
         # B = np.reshape(nparray, (-1, 25))
-        # print(B)
-        # ax = sns.heatmap(B)
-        # plt.imshow(B, cmap='hot', interpolation='nearest')
-        # plt.show()
+        print(self.heat_map_number_of_pass)
+        ax = sns.heatmap(self.heat_map_number_of_pass)
+        plt.imshow(self.heat_map_number_of_pass, cmap='hot', interpolation='nearest')
+        plt.show()
 
         #         current_state = (self.x, self.y)
         #         current_reward = self.board.reward()
