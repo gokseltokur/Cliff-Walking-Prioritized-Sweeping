@@ -6,7 +6,7 @@ COLUMNS = 12
 STARTX = 0
 STARTY = 0
 
-ENDX = 3
+ENDX = 8
 ENDY = 11
 
 
@@ -32,6 +32,12 @@ class Board:
         self.board[1][8] = -1
         self.board[1][9] = -1
         self.board[1][10] = -1
+        self.board[4][10] = -1
+        self.board[8][10] = -1
+        self.board[5][11] = -1
+        self.board[4][11] = -1
+        self.board[3][3] = -1
+        self.board[4][4] = -1
 
     def move(self, direction):
         newx = None

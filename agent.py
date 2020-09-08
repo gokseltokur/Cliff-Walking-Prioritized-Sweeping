@@ -66,7 +66,7 @@ class Agent:
 
     def train(self, rounds):
         for i in range(rounds):
-            # number_of_steps = 0
+            number_of_steps = 0
             # print('Round: ' + str(i))
             # sum_reward = 0
             # max_reward = -99999
@@ -88,7 +88,11 @@ class Agent:
                 #print( np.max(list(self.state_actions[nxtState].values())) )
                 tmp_diff = abs(reward + np.max(list(self.state_actions[nxtState].values())) - self.state_actions[current_state][action])
                 if tmp_diff > self.theta:
-                    self.queue.put((tmp_diff, (current_state, action)))
+                    try:
+                        self.queue.put((tmp_diff, (current_state, action)))
+                    except MemoryError:
+                        print(MemoryError)
+                        break
 
                 # Update model and predecessors ????????????????
                 if current_state not in self.model.keys():
@@ -118,14 +122,20 @@ class Agent:
                     for (pre_state, pre_action) in pre_state_action_list:
                         pre_reward, _ = self.model[pre_state][pre_action]
                         pre_tmp_diff = abs(pre_reward + np.max(list(self.state_actions[_state].values())) - self.state_actions[pre_state][pre_action])
-
-                        if pre_tmp_diff > self.theta:
-                            self.queue.put((pre_tmp_diff, (pre_state, pre_action)))
-
+                        try:
+                            if pre_tmp_diff > self.theta:
+                                self.queue.put((pre_tmp_diff, (pre_state, pre_action)))
+                        except MemoryError:
+                            print(MemoryError)
+                            break
+                
+                if self.exploration_rate > 0.005:
+                    self.exploration_rate -= 0.00001
                 if self.board.is_agent_die:
                     break
-            print("#####", int(i))
+            print("#####", int(i), (self.exploration_rate))
             self.steps_per_episode.append(len(self.states))
+            print(self.steps_per_episode)
             self.reset()
 
 
