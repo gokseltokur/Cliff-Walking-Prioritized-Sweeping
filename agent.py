@@ -1,6 +1,8 @@
 from board import *
 import numpy as np
 import queue
+import seaborn as sns
+import matplotlib.pyplot as plt
 q = queue.Queue(maxsize=20)
 
 from queue import PriorityQueue
@@ -66,6 +68,7 @@ class Agent:
 
     def train(self, rounds):
         for i in range(rounds):
+            self.queue = PriorityQueue()
             number_of_steps = 0
             # print('Round: ' + str(i))
             # sum_reward = 0
@@ -129,15 +132,43 @@ class Agent:
                             print(MemoryError)
                             break
                 
-                if self.exploration_rate > 0.005:
-                    self.exploration_rate -= 0.00001
+                if self.exploration_rate > 0.005 and self.board.is_agent_reach:
+                    self.exploration_rate -= 0.05
                 if self.board.is_agent_die:
                     break
             print("#####", int(i), (self.exploration_rate))
             self.steps_per_episode.append(len(self.states))
-            print(self.steps_per_episode)
-            self.reset()
+            #print(self.steps_per_episode)
+            
+            
+            if i > 10:
+                sum_of_10 = 0
+                for e in range(1, 11):
+                    sum_of_10 += self.steps_per_episode[-e]
+                    #print("@@@@", self.steps_per_episode[-e])
 
+                mean_of_10 = sum_of_10/10
+
+                sum_variance = 0
+                for e in range(1, 11):
+                    sum_variance += pow((self.steps_per_episode[-e] - mean_of_10),2)
+                        
+                variance = sum_variance / (10 - 1)
+                if(variance == 0):
+                    print("VARIANCE == 0")
+                    break
+                
+
+
+            self.reset()
+        # sns.set()
+        # nparray = np.array(self.steps_per_episode)
+        # print(nparray)
+        # B = np.reshape(nparray, (-1, 25))
+        # print(B)
+        # ax = sns.heatmap(B)
+        # plt.imshow(B, cmap='hot', interpolation='nearest')
+        # plt.show()
 
         #         current_state = (self.x, self.y)
         #         current_reward = self.board.reward()
