@@ -4,9 +4,9 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-EXPLORATION_RATE = 0.4
+EXPLORATION_RATE = 0.2
 LEARNING_RATE = 0.1
-NUMBER_OF_ROUNDS = 10000
+NUMBER_OF_ROUNDS = 2000
 
 
 def main():

@@ -8,7 +8,7 @@ q = queue.Queue(maxsize=20)
 from queue import PriorityQueue
 
 class Agent:
-    def __init__(self, exploration_rate, learning_rate, n_steps=4, theta=0):
+    def __init__(self, exploration_rate, learning_rate, n_steps=5, theta=0):
         self.board = Board()
         self.exploration_rate = exploration_rate
         self.learning_rate = learning_rate
@@ -136,28 +136,30 @@ class Agent:
                             print(MemoryError)
                             break
                 
-                if self.exploration_rate > 0.005 and self.board.is_agent_reach:
-                    self.exploration_rate -= 0.05
+                if self.exploration_rate > 0.003 and self.board.is_agent_reach:
+                    self.exploration_rate -= 0.001
                 if self.board.is_agent_die:
                     break
             print("#####", int(i), (self.exploration_rate))
             self.steps_per_episode.append(len(self.states))
-            #print(self.steps_per_episode)
             
             
-            if i > 10:
+            
+            if i > 20: 
                 sum_of_10 = 0
-                for e in range(1, 11):
+                for e in range(1, 21):
                     sum_of_10 += self.steps_per_episode[-e]
                     #print("@@@@", self.steps_per_episode[-e])
 
-                mean_of_10 = sum_of_10/10
+                mean_of_10 = sum_of_10/20
 
                 sum_variance = 0
-                for e in range(1, 11):
+                for e in range(1, 21):
                     sum_variance += pow((self.steps_per_episode[-e] - mean_of_10),2)
                         
-                variance = sum_variance / (10 - 1)
+                variance = sum_variance / (20 - 1)
+                print(self.steps_per_episode[-21:-1])
+                print("VARIANCE == ", variance)
                 if(variance == 0):
                     print("VARIANCE == 0")
                     break
