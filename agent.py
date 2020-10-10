@@ -171,15 +171,18 @@ class Agent:
 
         
         # print (self.state_actions)
-
         sns.set()
+        np_steps_per_episode = np.array(self.steps_per_episode)
+        plt.plot(np_steps_per_episode)
+        plt.show()
+        
         # nparray = np.array(self.steps_per_episode)
         # # print(nparray)
         # B = np.reshape(nparray, (-1, 25))
-        print(self.heat_map_number_of_pass)
-        ax = sns.heatmap(self.heat_map_number_of_pass)
-        plt.imshow(self.heat_map_number_of_pass, cmap='hot', interpolation='nearest')
-        plt.show()
+        # print(self.heat_map_number_of_pass)
+        # ax = sns.heatmap(self.heat_map_number_of_pass)
+        # plt.imshow(self.heat_map_number_of_pass, cmap='hot', interpolation='nearest')
+        # plt.show()
 
         #         current_state = (self.x, self.y)
         #         current_reward = self.board.reward()

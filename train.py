@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 EXPLORATION_RATE = 0.2
 LEARNING_RATE = 0.1
-NUMBER_OF_ROUNDS = 2000
+NUMBER_OF_ROUNDS = 5000
 
 
 def main():
@@ -42,18 +42,18 @@ def main():
 
 
 
-    for i in range(len(agent.board.board)):
-        for j in range(len(agent.board.board[0])):
-            agent.heat_map_q_values[i][j] = max(agent.state_actions[(i, j)].values())
+    # for i in range(len(agent.board.board)):
+    #     for j in range(len(agent.board.board[0])):
+    #         agent.heat_map_q_values[i][j] = max(agent.state_actions[(i, j)].values())
 
-    sns.set()
-    # nparray = np.array(self.steps_per_episode)
-    # # print(nparray)
-    # B = np.reshape(nparray, (-1, 25))
-    print(agent.heat_map_q_values)
-    ax = sns.heatmap(agent.heat_map_q_values, vmin=0, vmax=0.0000002)
-    plt.imshow(agent.heat_map_q_values, cmap='hot', interpolation='nearest')
-    plt.show()
+    # sns.set()
+    # # nparray = np.array(self.steps_per_episode)
+    # # # print(nparray)
+    # # B = np.reshape(nparray, (-1, 25))
+    # print(agent.heat_map_q_values)
+    # ax = sns.heatmap(agent.heat_map_q_values, vmin=0, vmax=0.0000002)
+    # plt.imshow(agent.heat_map_q_values, cmap='hot', interpolation='nearest')
+    # plt.show()
 
 
 
